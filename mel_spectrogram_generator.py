@@ -7,6 +7,8 @@ import librosa.display
 import os
 from multiprocessing import Pool
 
+fileType = '.flac'
+
 def audio_to_spectrogram(file_path, output_file):
     # Load the audio file
     y, sr = librosa.load(file_path)
@@ -26,16 +28,17 @@ def audio_to_spectrogram(file_path, output_file):
     plt.close()
 
 def process_file(file_name):
-    if file_name.endswith('.flac'):
+    if file_name.endswith(fileType):
         full_path = os.path.join(folder_path, file_name)
         output_name = os.path.join(folder_path, os.path.splitext(file_name)[0] + '.png')
         audio_to_spectrogram(full_path, output_name)
         print(f"Processed: {file_name}")
+        os.remove(full_path)  # Delete the .flac file
 
-folder_path = '/Users/taehmotheus/Desktop/AI-voice-detection/test_data/example/spoof'
+folder_path = '/Users/taehmotheus/Documents/GitHub repositories/CallGuardian/data/processed_LA/spoof'
 
 # List of .flac files
-flac_files = [f for f in os.listdir(folder_path) if f.endswith('.flac')]
+flac_files = [f for f in os.listdir(folder_path) if f.endswith(fileType)]
 
 # Using multiprocessing
 if __name__ == '__main__':
